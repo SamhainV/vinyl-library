@@ -1,0 +1,38 @@
+import { useEffect, useState } from 'react';
+
+function App() {
+  const [vinyls, setVinyls] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/api/vinyls')
+      .then(res => res.json())
+      .then(data => {
+        setVinyls(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error al obtener vinilos:', err);
+        setLoading(false);
+      });
+  }, []);
+
+  return (
+    <div style={{ padding: '1rem' }}>
+      <h1>🎵 Mis Vinilos</h1>
+      {loading ? (
+        <p>Cargando...</p>
+      ) : (
+        <ul>
+          {vinyls.map((vinyl) => (
+            <li key={vinyl.Id}>
+              <strong>{vinyl.Title}</strong> ({vinyl.Release_date})
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+export default App;
